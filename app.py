@@ -94,7 +94,19 @@ app.layout = html.Div(children=[
         figure=fig2,
         style={'width':'50%'}
         )
-    ], style={'display':'flex'})
+    ], style={'display':'flex'}),
+    html.Div([
+    dcc.Slider(
+        id='slider-updatemode',
+        # marks={i: '{}'.format(10 ** i) for i in range(4)},
+        min = df_genre.release_year.min(), 
+        max= df_genre.release_year.max(),
+        value=[df_genre.release_year.min(), df_genre.release_year.max()],
+        step=1,
+        # updatemode='drag'
+    ),
+    html.Div(id='updatemode-output-container', style={'margin-top': 20})
+])
     ])
 
 
@@ -103,21 +115,3 @@ app.layout = html.Div(children=[
 if __name__ == '__main__':
     app.run_server()
 
-
-    #    layout = html.Div([html.H1('Sklepy',style={'text-align':'center'}),
-
-    #                 html.Div([html.Div([dcc.Dropdown(id='Weekday_dropdown',
-    #                             options=[{'label':weekday,'value':weekday} for weekday in df['weekday'].unique()],
-    #                             value=df['weekday'].unique()[0]),
-    #                             dcc.Graph(id='pie-Store_type_day')],
-    #                             style={'width':'50%'}),
-    #                 html.Div([dcc.Dropdown(id='Store_type_dropdown',
-    #                             options=[{'label':Store_type,'value':Store_type} for Store_type in df['Store_type'].unique()],
-    #                             value=df['Store_type'].unique()[0]),
-    #                             dcc.Graph(id='barh-Store_type_country')],
-    #                             style={'width':'50%'})],style={'display':'flex'}),
-    #                             html.Div(id='temp-out')
-    #                 ])
-
-
-                    # style={'display': 'inline-block'}
