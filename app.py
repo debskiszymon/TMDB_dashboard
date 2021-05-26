@@ -48,25 +48,26 @@ colors = ['rgb(190, 219, 57)',
 'rgb(0, 45, 97)',
 'rgb(0, 34, 83)']
 
+mark_values = {1874: '1874', 1900: '1900', 2000: '2000', 2021: '2021'}
 
-grouped = df_genre.groupby('genre').vote_average.mean()
-fig1 = go.Figure(data=[go.Pie(labels=grouped.index, 
-                              values=grouped.values, 
-                              texttemplate = "%{label}: %{value:.1f}", 
-                              pull=pull)])
+# grouped = df_genre.groupby('genre').vote_average.mean()
+# fig1 = go.Figure(data=[go.Pie(labels=grouped.index, 
+#                               values=grouped.values, 
+#                               texttemplate = "%{label}: %{value:.1f}", 
+#                               pull=pull)])
 
 
-fig1.update_traces(marker=dict(colors=colors, 
-                           line=dict(color='rgb(0,0,0)', 
-                           width=1)), 
-                           hoverinfo='label+percent', 
-                           textfont_size=11, 
-                           textposition='inside')
-fig1.update_layout(
-    autosize=False,
-    width=1000,
-    height=800,
-title='Average votes by Genre')
+# fig1.update_traces(marker=dict(colors=colors, 
+#                            line=dict(color='rgb(0,0,0)', 
+#                            width=1)), 
+#                            hoverinfo='label+percent', 
+#                            textfont_size=11, 
+#                            textposition='inside')
+# fig1.update_layout(
+#     autosize=False,
+#     width=1000,
+#     height=800,
+# title='Average votes by Genre')
 
 fig2 = go.Figure([go.Bar(x=df_dash.nlargest(10, 'vote_count').original_title, 
                         y=df_dash.nlargest(10, 'vote_count').vote_count)])
@@ -86,29 +87,61 @@ app.layout = html.Div(children=[
     html.Div(children=[
         dcc.Graph(
         id='fig1',
-        figure=fig1,
+        # figure=fig1,
         style={'width':'50%'}
     ),
         dcc.Graph(
         id='fig2',
-        figure=fig2,
+        # figure=fig2,
         style={'width':'50%'}
         )
     ], style={'display':'flex'}),
     html.Div([
-    dcc.Slider(
-        id='slider-updatemode',
-        # marks={i: '{}'.format(10 ** i) for i in range(4)},
-        min = df_genre.release_year.min(), 
-        max= df_genre.release_year.max(),
-        value=[df_genre.release_year.min(), df_genre.release_year.max()],
-        step=1,
-        # updatemode='drag'
-    ),
-    html.Div(id='updatemode-output-container', style={'margin-top': 20})
+        dcc.RangeSlider(
+            id='the_year',
+            # marks={i: '{}'.format(10 ** i) for i in range(4)},
+            min = 1874, 
+            max= 2021,
+            value=[1874, 2021],
+            marks= mark_values,
+            step=None,
+            # updatemode='drag'
+        ),
+    # html.Div(id='updatemode-output-container', style={'margin-top': 20})
 ])
-    ])
+])
 
+
+# ------------------------
+@app.callback(
+    Output('fig1', 'figure'),
+    [Input('the_year', 'value')]
+)
+
+def update_fig1(year_chosen):
+    # print(year_chosen)
+    dff_genre = df_genre[(df_genre['release_year']>=year_chosen[0])&(df_genre['release_year']<=year_chosen[1])]
+
+    grouped = dff_genre.groupby('genre').vote_average.mean()
+    fig1 = go.Figure(data=[go.Pie(labels=grouped.index, 
+                              values=grouped.values, 
+                              texttemplate = "%{label} %{value:.1f}", 
+                              pull=pull)])
+
+
+    fig1.update_traces(marker=dict(colors=colors, 
+                            line=dict(color='rgb(0,0,0)', 
+                            width=1)), 
+                            hoverinfo='label+percent', 
+                            textfont_size=11, 
+                            textposition='inside')
+    fig1.update_layout(
+        autosize=False,
+        width=1000,
+        height=800,
+    title='Average votes by Genre')
+
+    return fig1
 
 
 
