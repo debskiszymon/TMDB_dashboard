@@ -102,15 +102,15 @@ app.layout = html.Div(children=[
         dcc.Graph(
         id='fig1',
         # figure=fig1,
-        style={'width':'50%'}
+        style={'width':'40%'}
     ),
         dcc.Graph(
         id='fig2',
         # figure=fig2,
-        style={'width':'50%'}
+        style={'width':'40%', "margin-left": "80px"}
         )
     ], style={'display':'flex'}),
-    html.Div(id='year_selected', style={'padding-left': '5%'}),
+    # html.Div(id='year_selected', style={'padding-left': '5%'}),
     html.Div([
         dcc.RangeSlider(
             id='the_year',
@@ -118,14 +118,15 @@ app.layout = html.Div(children=[
             min = year_list(df_genre)[-1], 
             max= year_list(df_genre)[0],
             value=[year_list(df_genre)[-1], year_list(df_genre)[0]],
+            # dots=True,
             # marks= mark_values,
             # marks={i : {'label' : str(year_list[i]), 'style':{'transform':'rotate(-90deg)'}} for i in range(0, len(year_list)-1)},
             # marks={each : {'label': year, 'style': {'transform': 'rotate(45deg)'}} for each, year in enumerate(year_dict)},
-            # marks={int(i) : {"label": str(i), "style": {"transform": "rotate(45deg)", 'font-size':'11px'}} for i in year_list(df_genre)[::2]},
-            step=1,
-            # updatemode='drag'
+            marks={int(i) : {"label": str(i), "style": {"transform": "rotate(45deg)", 'font-size':'11px', 'opacity':'0.8'}} for i in year_list(df_genre)[::2]},
+            tooltip={'always_visible':'True', 'placement':'top'}
+            # step=1
         )], 
-        style={'width': '90%','padding-left':'5%', 'padding-right':'5%', "margin-top": "30px"})
+        style={'width': '90%','padding-left':'5%', 'padding-right':'5%'})
         # html.Div(id='year_selected')
     ])
 
