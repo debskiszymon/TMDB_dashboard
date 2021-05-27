@@ -110,10 +110,10 @@ app.layout = html.Div(children=[
         style={'width':'50%'}
         )
     ], style={'display':'flex'}),
+    html.Div(id='year_selected', style={'padding-left': '5%'}),
     html.Div([
         dcc.RangeSlider(
             id='the_year',
-            size = 50,
             # marks={i: '{}'.format(10 ** i) for i in range(4)},
             min = year_list(df_genre)[-1], 
             max= year_list(df_genre)[0],
@@ -121,13 +121,13 @@ app.layout = html.Div(children=[
             # marks= mark_values,
             # marks={i : {'label' : str(year_list[i]), 'style':{'transform':'rotate(-90deg)'}} for i in range(0, len(year_list)-1)},
             # marks={each : {'label': year, 'style': {'transform': 'rotate(45deg)'}} for each, year in enumerate(year_dict)},
-            marks={int(i) : {"label": str(i), "style": {"transform": "rotate(45deg)", 'font-size':'11px'}} for i in year_list(df_genre)[::2]},
-            step=None,
+            # marks={int(i) : {"label": str(i), "style": {"transform": "rotate(45deg)", 'font-size':'11px'}} for i in year_list(df_genre)[::2]},
+            step=1,
             # updatemode='drag'
-        ),
-    # html.Div(id='updatemode-output-container', style={'margin-top': 20, 'width':'50%'})
-], style={'width': '90%','padding-left':'5%', 'padding-right':'5%', 'opacity': '0.8'})
-])
+        )], 
+        style={'width': '90%','padding-left':'5%', 'padding-right':'5%', "margin-top": "30px"})
+        # html.Div(id='year_selected')
+    ])
 
 
 # ------------------------
@@ -186,6 +186,16 @@ def update_fig2(year_chosen):
     title='Highest vote count')
 
     return fig2
+
+@app.callback(
+#     Output('years_selected', 'figure'),
+#     [Input('the_year', 'value')]
+# )
+    dash.dependencies.Output('year_selected', 'children'),
+    [dash.dependencies.Input('the_year', 'value')])
+
+def update_output(year_chosen):
+    return 'Years selected {year1} to {year2}'.format(year1= year_chosen[0], year2=year_chosen[1])
 
 if __name__ == '__main__':
     app.run_server()
