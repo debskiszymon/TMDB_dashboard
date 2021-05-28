@@ -54,6 +54,15 @@ colors = ['rgb(190, 219, 57)',
 def year_list(df):
     year = list(df['release_year'].unique())
     return year
+
+
+def mark_values(df):
+    year_list = list(df['release_year'].unique())
+    marks = []
+    for _ in range(0, (year_list[0] - year_list[-1]) // 10 + 1 ):
+        marks.append(year_list[-1] + (10 * _))
+    marks.append(year_list[0])
+    return marks
 # year_list = list(year)
 # year_keys = [int(i) for i in list(year)[::3]]
 # year_values = [str(i) for i in list(year)[::3]]
@@ -122,7 +131,7 @@ app.layout = html.Div(children=[
             # marks= mark_values,
             # marks={i : {'label' : str(year_list[i]), 'style':{'transform':'rotate(-90deg)'}} for i in range(0, len(year_list)-1)},
             # marks={each : {'label': year, 'style': {'transform': 'rotate(45deg)'}} for each, year in enumerate(year_dict)},
-            marks={int(i) : {"label": str(i), "style": {"transform": "rotate(45deg)", 'font-size':'11px', 'opacity':'0.8'}} for i in year_list(df_genre)[::2]},
+            marks={int(i) : {"label": str(i), "style": {"transform": "rotate(45deg)", 'font-size':'14px', 'opacity':'0.9'}} for i in mark_values(df_genre)},
             tooltip={'always_visible':'True', 'placement':'top'}
             # step=1
         )], 
@@ -184,7 +193,8 @@ def update_fig2(year_chosen):
         autosize=False,
         width=1000,
         height=600,
-    title='Highest vote count')
+    title='Highest vote count',
+    showlegend=False)
 
     return fig2
 
