@@ -106,7 +106,7 @@ def mark_values(df):
 
 
 app.layout = html.Div(children=[
-    html.H1(children='TMDB Movies',style={'text-align':'center'}),
+    html.H1(children='TMDB Movies dashboard',style={'text-align':'center'}),
     html.Div(children=[
         dcc.Graph(
         id='fig1',
@@ -167,7 +167,7 @@ def update_fig1(year_chosen):
         autosize=False,
         width=1000,
         height=800,
-    title='Average votes by Genre')
+    title='Average vote score by Genre')
 
     return fig1
 
@@ -193,7 +193,7 @@ def update_fig2(year_chosen):
         autosize=False,
         width=1000,
         height=600,
-    title='Highest vote count',
+    title='Top 10 Movies with highest vote count',
     showlegend=False)
 
     return fig2
