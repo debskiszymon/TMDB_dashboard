@@ -14,8 +14,11 @@ import plotly.graph_objects as go
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-server = app.server
+app = dash.Dash(__name__, 
+    external_stylesheets=external_stylesheets, 
+    meta_tags=[{'name': 'viewport', 'content': 'user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5,'}]
+    )
+# server = app.server
 
 df_genre = pd.read_csv('df_movies_genre.csv')
 df_dash = pd.read_csv('df_movies_dash.csv')
