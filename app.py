@@ -1,3 +1,4 @@
+from dash_html_components.Div import Div
 import pandas as pd
 import datetime as dt
 import os
@@ -5,20 +6,17 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-# import dash_auth
+
 import plotly.graph_objects as go
-# import tab1
-# import tab2
-# import tab3
-# import dash_auth
+
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, 
     external_stylesheets=external_stylesheets, 
-    meta_tags=[{'name': 'viewport', 'content': 'user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5,'}]
+    meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5,'}]
     )
-# server = app.server
+server = app.server
 
 df_genre = pd.read_csv('df_movies_genre.csv')
 df_dash = pd.read_csv('df_movies_dash.csv')
@@ -67,62 +65,27 @@ def mark_values(df):
         marks.append(year_list[-1] + (10 * _))
     marks.append(year_list[0])
     return marks
-# year_list = list(year)
-# year_keys = [int(i) for i in list(year)[::3]]
-# year_values = [str(i) for i in list(year)[::3]]
-# zip_iterator = zip(year_keys, year_values)
-# year_dict = dict(zip_iterator)
 
-# mark_values = year_dict
-
-# grouped = df_genre.groupby('genre').vote_average.mean()
-# fig1 = go.Figure(data=[go.Pie(labels=grouped.index, 
-#                               values=grouped.values, 
-#                               texttemplate = "%{label}: %{value:.1f}", 
-#                               pull=pull)])
-
-
-# fig1.update_traces(marker=dict(colors=colors, 
-#                            line=dict(color='rgb(0,0,0)', 
-#                            width=1)), 
-#                            hoverinfo='label+percent', 
-#                            textfont_size=11, 
-#                            textposition='inside')
-# fig1.update_layout(
-#     autosize=False,
-#     width=1000,
-#     height=800,
-# title='Average votes by Genre')
-
-# fig2 = go.Figure([go.Bar(x=df_dash.nlargest(10, 'vote_count').original_title, 
-#                         y=df_dash.nlargest(10, 'vote_count').vote_count)])
-
-# fig2.update_traces(marker_color=colors, 
-#                   marker_line_color='rgb(0,0,0)',
-#                   marker_line_width=1)
-
-# fig2.update_layout(
-#     autosize=False,
-#     width=1000,
-#     height=600,
-# title='Highest vote count')
-
-
-
-app.layout = html.Div(children=[
-    html.H1(children='TMDB Movies dashboard',style={'text-align':'center'}),
-    html.Div(children=[
-        dcc.Graph(
-        id='fig1',
+app.layout = html.Div([
+    html.Div([
+    html.H1('TMDB Movies dashboard',style={'text-align':'center'})
+    ], className='row'),
+    html.Div([
+        html.Div([dcc.Graph(
+        id='fig1')],
+        className='six columns'),
         # figure=fig1,
-        style={'width':'40%'}
-    ),
-        dcc.Graph(
-        id='fig2',
+        # style={'width':'50%', 'float':'left'}),
+        # style={'width' : '50%'}),
+        html.Div([dcc.Graph(
+        id='fig2')],
         # figure=fig2,
-        style={'width':'40%', "margin-left": "80px"}
-        )
-    ], style={'display':'flex'}),
+        # style={'width':'50%', 'float':'right'})],
+        # style={'width' : '50%'})],
+        className='six columns')],
+        style={'padding-bottom':'5%'},
+        className='row'),
+    # style={'display':'flex'}),
     # html.Div(id='year_selected', style={'padding-left': '5%'}),
     html.Div([
         dcc.RangeSlider(
@@ -139,9 +102,9 @@ app.layout = html.Div(children=[
             tooltip={'always_visible':'True', 'placement':'top'}
             # step=1
         )], 
-        style={'width': '90%','padding-left':'5%', 'padding-right':'5%'})
         # html.Div(id='year_selected')
-    ])
+        className='row')
+    ], className='ten columns offset-by-one')
 
 
 # ------------------------
@@ -168,9 +131,9 @@ def update_fig1(year_chosen):
                             textfont_size=11, 
                             textposition='inside')
     fig1.update_layout(
-        autosize=False,
-        width=1000,
-        height=800,
+        # autosize=False,
+        # width=1000,
+        height=500,
     title='Average vote score by Genre')
 
     return fig1
@@ -194,9 +157,9 @@ def update_fig2(year_chosen):
                     marker_line_width=1)
 
     fig2.update_layout(
-        autosize=False,
-        width=1000,
-        height=600,
+        # autosize=False,
+        # width=1000,
+        height=500,
     title='Top 10 Movies with highest vote count',
     showlegend=False)
 
