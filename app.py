@@ -68,43 +68,27 @@ def mark_values(df):
 
 app.layout = html.Div([
     html.Div([
-    html.H1('TMDB Movies dashboard',style={'text-align':'center'})
-    ], className='row'),
+    html.H1('TMDB Movies dashboard',style={'text-align':'center'})],
+    className='row'),
     html.Div([
         html.Div([dcc.Graph(
-        id='fig1')],
-        className='six columns'),
-        # figure=fig1,
-        # style={'width':'50%', 'float':'left'}),
-        # style={'width' : '50%'}),
+            id='fig1')],
+            className='six columns'),
         html.Div([dcc.Graph(
-        id='fig2')],
-        # figure=fig2,
-        # style={'width':'50%', 'float':'right'})],
-        # style={'width' : '50%'})],
-        className='six columns')],
-        style={'padding-bottom':'5%'},
-        className='row'),
-    # style={'display':'flex'}),
-    # html.Div(id='year_selected', style={'padding-left': '5%'}),
+            id='fig2')],
+            className='six columns')],
+            style={'padding-bottom':'5%'},
+            className='row'),
     html.Div([
         dcc.RangeSlider(
             id='the_year',
-            # marks={i: '{}'.format(10 ** i) for i in range(4)},
             min = year_list(df_genre)[-1], 
             max= year_list(df_genre)[0],
             value=[year_list(df_genre)[-1], year_list(df_genre)[0]],
-            # dots=True,
-            # marks= mark_values,
-            # marks={i : {'label' : str(year_list[i]), 'style':{'transform':'rotate(-90deg)'}} for i in range(0, len(year_list)-1)},
-            # marks={each : {'label': year, 'style': {'transform': 'rotate(45deg)'}} for each, year in enumerate(year_dict)},
             marks={int(i) : {"label": str(i), "style": {"transform": "rotate(45deg)", 'font-size':'14px', 'opacity':'0.9'}} for i in mark_values(df_genre)},
-            tooltip={'always_visible':'True', 'placement':'top'}
-            # step=1
-        )], 
-        # html.Div(id='year_selected')
-        className='row')
-    ], className='ten columns offset-by-one')
+            tooltip={'always_visible':'True', 'placement':'top'})], 
+        className='row')], 
+    className='ten columns offset-by-one')
 
 
 # ------------------------
@@ -114,7 +98,6 @@ app.layout = html.Div([
 )
 
 def update_fig1(year_chosen):
-    # print(year_chosen)
     dff_genre = df_genre[(df_genre['release_year']>=year_chosen[0])&(df_genre['release_year']<=year_chosen[1])]
 
     grouped = dff_genre.groupby('genre').vote_average.mean()
@@ -131,9 +114,7 @@ def update_fig1(year_chosen):
                             textfont_size=11, 
                             textposition='inside')
     fig1.update_layout(
-        # autosize=False,
-        # width=1000,
-        height=500,
+        height=600,
     title='Average vote score by Genre')
 
     return fig1
@@ -146,7 +127,6 @@ def update_fig1(year_chosen):
 )
 
 def update_fig2(year_chosen):
-    # print(year_chosen)
     dff_dash = df_dash[(df_dash['release_year']>=year_chosen[0])&(df_dash['release_year']<=year_chosen[1])]
 
     fig2 = go.Figure([go.Bar(x=dff_dash.nlargest(10, 'vote_count').original_title, 
@@ -157,18 +137,13 @@ def update_fig2(year_chosen):
                     marker_line_width=1)
 
     fig2.update_layout(
-        # autosize=False,
-        # width=1000,
-        height=500,
+        height=600,
     title='Top 10 Movies with highest vote count',
     showlegend=False)
 
     return fig2
 
 @app.callback(
-#     Output('years_selected', 'figure'),
-#     [Input('the_year', 'value')]
-# )
     dash.dependencies.Output('year_selected', 'children'),
     [dash.dependencies.Input('the_year', 'value')])
 
